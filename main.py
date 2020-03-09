@@ -19,11 +19,13 @@ def parse_args():
     parser.add_argument('--num_DER', type=int, required=False,
                         default=4, help="number of DERs")
     parser.add_argument('--mode', type=str, required=False,
-                        default='Vcritc', help="voltage control mode", choices=['Vnom', 'Vcritc'])
+                        default='Vnom', help="voltage control mode", choices=['Vnom', 'Vcritc'])
     parser.add_argument('--critic_bus_id', type=int, required=False,
                         default=2, help="critical bus id")
     parser.add_argument('--plot_dir', type=str, required=False,
                         default=plot_dir, help="directory for storing results")
+    parser.add_argument('--plot_unit_voltage', type=bool, required=False,
+                        default=True, help="plot per unit voltage or not")
 
     args = parser.parse_args()
     return args
@@ -54,7 +56,10 @@ def main(args, DER_num, lines_num, loads_num, DER_controller):
             ((x[:, DER_num * 13 + lines_num * 2 + loads_num * 2 + j + 1] - mp[j] * x[:, 13 * j + 2]) / (
                     2 * pi)).tolist())
         # voltage of buses
-        vbus.append((np.sqrt(x[:, 13 * j + 10] ** 2 + x[:, 13 * j + 11] ** 2)).tolist())
+        if args.plot_unit_voltage is True:
+            vbus.append((np.sqrt(x[:, 13 * j + 10] ** 2 + x[:, 13 * j + 11] ** 2) / Vnom).tolist())
+        else:
+            vbus.append((np.sqrt(x[:, 13 * j + 10] ** 2 + x[:, 13 * j + 11] ** 2)).tolist())
 
     # subplot: https://matplotlib.org/3.1.3/gallery/pyplots/pyplot_scales.html#sphx-glr-gallery-pyplots-pyplot-scales-py
     plt.figure()
@@ -64,6 +69,7 @@ def main(args, DER_num, lines_num, loads_num, DER_controller):
         plt.plot(t, w[a], label='DER_id %s' % (a + 1))
     plt.xlim(0, 2)
     plt.xlabel("time")
+    # plt.legend()
     plt.title("DER Frequency")
 
     plt.subplot(222)
@@ -72,7 +78,7 @@ def main(args, DER_num, lines_num, loads_num, DER_controller):
     plt.title("Active power ratio")
     for b in range(DER_num):
         plt.plot(t, PDG[b], label='DER_id %s' % (b + 1))
-    # plt.legend()
+    plt.legend()
     plt.xlim(0, 2)
 
     plt.subplot(223)
@@ -83,6 +89,7 @@ def main(args, DER_num, lines_num, loads_num, DER_controller):
         plt.plot(t, vbus[c], label='DER_id %s' % (c + 1))
     # plt.legend()
     plt.xlim(0, 2)
+
 
     plt.subplot(224)
     plt.xlabel("time")
@@ -97,7 +104,16 @@ def main(args, DER_num, lines_num, loads_num, DER_controller):
                         wspace=0.35)
 
     plt.show()
-    plt.savefig(args.plot_dir + 'DER_' + str(args.num_DER) + '.png')
+    # plt.savefig(args.plot_dir + 'DER_' + str(args.num_DER) + '.png')
+
+    # plt.xlabel("time")
+    # plt.ylabel("voltage")
+    # plt.title("DER Voltage")
+    # for c in range(len(vbus)):
+    #     plt.plot(t, vbus[c], label='DER_id %s' % (c + 1))
+    # plt.legend()
+    # plt.xlim(0, 2)
+    # plt.show()
 
 
 if __name__ == '__main__':
