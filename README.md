@@ -24,11 +24,11 @@ Experiments & Analysis
 ---------
 - The first experiment is the frequency and voltage control for 4-DER and 20-DER microgrid systems. 
 
-We adapt the DER system proposed in reference [1]. The architecture is given by Fig.1.
+We adapt the DER system proposed in reference [1]. The architecture is given by Fig.1. In this system, only the first DER unit can access the reference value of frequency and voltage, while all the other DERs need to communicate with its neighbors to track the reference values.
 
 <p align="center">
      <img src="docs/DER_4_architecture.png" alt="output_example" width="40%" height="40%">
-     <br>Fig.1 Single-line diagram of 4-DER microgrid test system.
+     <br>Fig.1 Architecture and communication graph of 4-DER microgrid test system.
 </p>
 
 <p align="center">
@@ -36,10 +36,11 @@ We adapt the DER system proposed in reference [1]. The architecture is given by 
      <br>Fig.2 Frequency and voltage of 20 DER system
 </p>
 
+To build a large-scale microgrid system, we try our generation function on a 20-DER system, which is presented by reference [3]. The architecture is given by Fig.3.
 
 <p align="center">
      <img src="docs/DER_20_architecture.png" alt="output_example" width="40%" height="40%">
-     <br>Fig.3 Single-line diagram of 20-DER microgrid test system.
+     <br>Fig.3 Architecture and communication graph of 20-DER microgrid test system.
 </p>
 
 <p align="center">
