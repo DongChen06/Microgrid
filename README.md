@@ -26,8 +26,16 @@ In the implementation, we should build a similar configuration file and list the
 
 Last two functions will be added in the near future.
 
+System Design
+---------
+In this section, we will briefly illutrate the system design. Primary and second controller.
+
+To be added...
+
 Graph Genration Function
 ---------
+To make our life easy, we try to build a graph generation function, thus when we want to test a new microgrid system, we can just list the parameters and let the code to generate the architecture automatically.
+
 To be added...
 
 
