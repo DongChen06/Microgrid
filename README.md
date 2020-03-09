@@ -48,6 +48,19 @@ To build a large-scale microgrid system, we try our generation function on a 20-
      <br>Fig.4 Frequency and voltage of 20 DER system
 </p>
 
+
+- The second experiment is to achieve the critical bus voltage control.
+
+<p align="center">
+     <img src="docs/DER_4_critic.png" alt="output_example" width="40%" height="40%">
+     <br>Fig.5 Critic bus frequency and voltage of 4 DER system
+</p>
+
+<p align="center">
+     <img src="docs/DER_20_critic.png" alt="output_example" width="40%" height="40%">
+     <br>Fig.6 Critic bus frequency and voltage of 20 DER system
+</p>
+
 Reference
 ---------
 1. Bidram, Ali, Ali Davoudi, and Frank L. Lewis. "A multiobjective distributed control framework for islanded AC microgrids." IEEE Transactions on industrial informatics 10.3 (2014): 1785-1798.
