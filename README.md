@@ -27,24 +27,24 @@ Experiments & Analysis
 We adapt the DER system proposed in reference [1]. The architecture is given by Fig.1.
 
 <p align="center">
-     <img src="docs/DER_4.png" alt="output_example" width="60%" height="60%">
+     <img src="docs/DER_4_architecture.png" alt="output_example" width="40%" height="40%">
      <br>Fig.1 Single-line diagram of 4-DER microgrid test system.
 </p>
 
 <p align="center">
-     <img src="results - Vnom/DER_4.png" alt="output_example" width="60%" height="60%">
-     <br>Fig.1 Frequency and voltage of 20 DER system
-</p>
-
-
-<p align="center">
-     <img src="docs/DER_20.png" alt="output_example" width="60%" height="60%">
-     <br>Fig.1 Single-line diagram of 20-DER microgrid test system.
-</p>
-
-<p align="center">
-     <img src="results - Vnom/DER_20.png" alt="output_example" width="60%" height="60%">
+     <img src="docs/DER_4_Vnom.png" alt="output_example" width="60%" height="60%">
      <br>Fig.2 Frequency and voltage of 20 DER system
+</p>
+
+
+<p align="center">
+     <img src="docs/DER_20_architecture.png" alt="output_example" width="40%" height="40%">
+     <br>Fig.3 Single-line diagram of 20-DER microgrid test system.
+</p>
+
+<p align="center">
+     <img src="docs/DER_20_Vnom.png" alt="output_example" width="40%" height="40%">
+     <br>Fig.4 Frequency and voltage of 20 DER system
 </p>
 
 Reference
