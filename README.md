@@ -20,6 +20,11 @@ Code Structure
 In the implementation, we should build a similar configuration file and list the system configurations. We can claim our system design in the main function and keep the graph generation function unchanged.
 
 
+Graph Genration Function
+---------
+To be added...
+
+
 Experiments & Analysis
 ---------
 - The first experiment is the frequency and voltage control for 4-DER and 20-DER microgrid systems. 
