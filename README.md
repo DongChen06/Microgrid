@@ -24,9 +24,22 @@ Experiments & Analysis
 ---------
 - The first experiment is the frequency and voltage control for 4-DER and 20-DER microgrid systems. 
 
+We adapt the DER system proposed in reference [1]. The architecture is given by Fig.1.
+
+<p align="center">
+     <img src="docs/DER_4.png" alt="output_example" width="60%" height="60%">
+     <br>Fig.1 Single-line diagram of 4-DER microgrid test system.
+</p>
+
 <p align="center">
      <img src="results - Vnom/DER_4.png" alt="output_example" width="60%" height="60%">
      <br>Fig.1 Frequency and voltage of 20 DER system
+</p>
+
+
+<p align="center">
+     <img src="docs/DER_20.png" alt="output_example" width="60%" height="60%">
+     <br>Fig.1 Single-line diagram of 20-DER microgrid test system.
 </p>
 
 <p align="center">
