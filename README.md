@@ -1,7 +1,7 @@
 Large-scale Islanded Microgrids based on Multi-agent Reinforcement Learning Control Methods
 ===============
 - Built by Dong Chen from Michigan State University
-- Started on Feb.25, 2020
+- Started on Feb.01, 2020
 
 Overview
 -------
