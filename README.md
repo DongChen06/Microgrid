@@ -17,8 +17,14 @@ Code Structure
 - [configs/parameters_4.py](configs/parameters_4.py): This is the configuration file for the 4 DER system.
 - [configs/parameters_20.py](configs/parameters_20.py): This is the configuration file for the 20 DER system.
 
-In the implementation, we should build a similar configuration file and list the system configurations. We can claim our system design in the main function and keep the graph generation function unchanged.
+In the implementation, we should build a similar configuration file and list the system configurations. We can claim our system design in the main function and keep the graph generation function unchanged. Now our function provides,
 
+- [x] Normal volatge and frequency control.
+- [x] Critical bus volatge and frequency control.
+- [ ] Input parameters of microgrid system by excel or cvs file.
+- [ ] Use multi-agent reinforcement learning methods to control the microgrid system.
+
+Last two functions will be added in the near future.
 
 Graph Genration Function
 ---------
