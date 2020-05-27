@@ -5,6 +5,7 @@
 
 import numpy as np
 import math
+import random
 
 
 class DER_Unit:
@@ -82,7 +83,7 @@ class DER_Unit:
 class DER_controller:
     def __init__(self, mode, critic_bus_id, DER_num, lines_num, loads_num, DER_dic, BUSES, BUS_LOAD, rline, Lline,
                  a_ctrl, AP, G, Vnom,
-                 wref, mp1, rN, wc, F, wb, Lf, Cf, rLf, Lc, rLc, kp, ki):
+                 wref, mp1, rN, wc, F, wb, Lf, Cf, rLf, Lc, rLc, kp, ki, random_init=True):
         self.DG = []
         self.wn_id_ls = []
         self.vn_id_ls = []
@@ -110,7 +111,14 @@ class DER_controller:
         self.critic_bus_id = critic_bus_id
 
         for i in range(self.DER_num):
-            self.DG.append(DER_Unit(self.DER_dic[i][0], self.DER_dic[i][1], self.DER_dic[i][2], self.DER_dic[i][3],
+            if random_init:
+                ratio_R = 0.4 * random.random() + 0.8
+                ratio_L = 0.4 * random.random() + 0.8
+            else:
+                ratio_R = 1
+                ratio_L = 1
+
+            self.DG.append(DER_Unit(self.DER_dic[i][0]*ratio_R, self.DER_dic[i][1]*ratio_L, self.DER_dic[i][2], self.DER_dic[i][3],
                                     self.DER_dic[i][4],
                                     self.DER_dic[i][5], self.DER_dic[i][6], self.DER_dic[i][7], rN, wc, F, wb, Lf, Cf,
                                     rLf, Lc, rLc))
@@ -226,7 +234,7 @@ class DER_controller:
             Vref = self.kp * (self.Vnom - np.sqrt(
                 (self.vbD[self.critic_bus_id - 1]) ** 2 + (self.vbQ[self.critic_bus_id - 1]) ** 2)) + self.ki * x[-1]
 
-        if t < 1.0:
+        if t < 0.2:
             self.xdot[(13 * self.DER_num + 2 * self.lines_num + 2 * self.loads_num + 1):] = [0] * (
                     len(self.xdot) - (13 * self.DER_num + 2 * self.lines_num + 2 * self.loads_num + 1))
         else:

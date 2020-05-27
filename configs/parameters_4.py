@@ -55,10 +55,15 @@ Lline2 = 1.847 / (2 * pi * 60)
 rline3 = 0.23
 Lline3 = 0.318 / (2 * pi * 60)
 
-Rload1 = 12
-Lload1 = 5 / (2 * pi * 60)
-Rload2 = 15
-Lload2 = 5 / (2 * pi * 60)
+# Rload1 = 12
+# Lload1 = 5 / (2 * pi * 60)
+# Rload2 = 15
+# Lload2 = 5 / (2 * pi * 60)
+
+Rload1 = 2.5
+Lload1 = 1 / (2 * pi * 60)
+Rload2 = 3
+Lload2 = 2 / (2 * pi * 60)
 
 # Controller Parameters
 a_ctrl = 40
@@ -70,7 +75,7 @@ AP = 4 * np.array([[0, 0, 0, 0],
                    ])
 
 # Pinning gain to the reference frequency
-G = np.array([[1, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]])
+G = np.array([[1, 0, 0, 0], [0, 1, 0, 0], [0, 1, 0, 0], [0, 1, 0, 0]])
 
 # matrix for bus and load connection
 BUS_LOAD = [1, 0, 1, 0]

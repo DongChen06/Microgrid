@@ -14,7 +14,7 @@ rN = 1e4
 F = .75
 wb = 2 * pi * 60
 wref = 2 * pi * 60
-Vnom = 480
+Vnom = 380
 
 kp = 4
 ki = 40

@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 from DER_fn import DER_controller
 import argparse
 import os
-
+from datetime import datetime
 
 def parse_args():
     default_config_dir = 'configs'
@@ -17,7 +17,7 @@ def parse_args():
     parser.add_argument('--config_dir', type=str, required=False,
                         default=default_config_dir, help="experiment config dir")
     parser.add_argument('--num_DER', type=int, required=False,
-                        default=4, help="number of DERs")
+                        default=20, help="number of DERs")
     parser.add_argument('--mode', type=str, required=False,
                         default='Vnom', help="voltage control mode", choices=['Vnom', 'Vcritc'])
     parser.add_argument('--critic_bus_id', type=int, required=False,
@@ -32,17 +32,27 @@ def parse_args():
 
 
 def main(args, DER_num, lines_num, loads_num, DER_controller):
-    # time points
-    t = np.linspace(0, 2)
+    # time points, sampling time = 0.04
+    t = np.linspace(0, 1.2, 31)
+    start = datetime.now()
     if args.mode == 'Vnom':
         x = odeint(DER_controller.VSI_VFctrl_func, x0, t, atol=1e-10, rtol=1e-11, mxstep=5000)
     else:
         x = odeint(DER_controller.VSI_VFctrl_func, x_critic, t, atol=1e-10, rtol=1e-11, mxstep=5000)
+    print(datetime.now() - start)
+
     vbus = []
     PDG = []
     QDG = []
     w = []
+
+    # control input
+    wn = []
+    vn = []
+
     x = np.array(x)
+    reward = 0
+
     # active/reactive power ratio
     for j in range(DER_num):
         PDG.append((mp[j] * (np.multiply(x[:, 13 * j + 10], x[:, 13 * j + 12]) + np.multiply(x[:, 13 * j + 11],
@@ -61,13 +71,27 @@ def main(args, DER_num, lines_num, loads_num, DER_controller):
         else:
             vbus.append((np.sqrt(x[:, 13 * j + 10] ** 2 + x[:, 13 * j + 11] ** 2)).tolist())
 
+        # control input
+        wn.append((x[:, DER_num * 13 + lines_num * 2 + loads_num * 2 + j + 1]).tolist())
+        vn.append((x[:, DER_num * 14 + lines_num * 2 + loads_num * 2 + j + 1]).tolist())
+
+        for q in range(len(vbus[j][11:])):
+            vi = vbus[j][11:][q]
+            if vi >= 0.95 and vi <= 1.05:
+                reward += 0.05 - np.abs(1 - vi)
+            elif vi <= 0.8 or vi >= 1.25:
+                reward += -20
+            else:
+                reward += - np.abs(1 - vi)
+    print(reward)
+
     # subplot: https://matplotlib.org/3.1.3/gallery/pyplots/pyplot_scales.html#sphx-glr-gallery-pyplots-pyplot-scales-py
     plt.figure()
 
     plt.subplot(221)
     for a in range(DER_num):
         plt.plot(t, w[a], label='DER_id %s' % (a + 1))
-    plt.xlim(0, 2)
+    # plt.xlim(0, 6)
     plt.xlabel("time")
     # plt.legend()
     plt.title("DER Frequency")
@@ -78,8 +102,8 @@ def main(args, DER_num, lines_num, loads_num, DER_controller):
     plt.title("Active power ratio")
     for b in range(DER_num):
         plt.plot(t, PDG[b], label='DER_id %s' % (b + 1))
-    plt.legend()
-    plt.xlim(0, 2)
+    # plt.legend()
+    # plt.xlim(0, 6)
 
     plt.subplot(223)
     plt.xlabel("time")
@@ -88,7 +112,7 @@ def main(args, DER_num, lines_num, loads_num, DER_controller):
     for c in range(DER_num):
         plt.plot(t, vbus[c], label='DER_id %s' % (c + 1))
     # plt.legend()
-    plt.xlim(0, 2)
+    # plt.xlim(0, 6)
 
 
     plt.subplot(224)
@@ -98,27 +122,49 @@ def main(args, DER_num, lines_num, loads_num, DER_controller):
     for d in range(DER_num):
         plt.plot(t, QDG[d], label='DER_id %s' % (d + 1))
     # plt.legend()
-    plt.xlim(0, 2)
+    # plt.xlim(0, 6)
 
     plt.subplots_adjust(top=0.92, bottom=0.08, left=0.10, right=0.95, hspace=0.25,
                         wspace=0.35)
 
     plt.show()
-    # plt.savefig(args.plot_dir + 'DER_' + str(args.num_DER) + '.png')
+    plt.savefig(args.plot_dir + 'DER_' + str(args.num_DER) + '.png')
 
-    # plt.xlabel("time")
-    # plt.ylabel("voltage")
-    # plt.title("DER Voltage")
-    # for c in range(len(vbus)):
-    #     plt.plot(t, vbus[c], label='DER_id %s' % (c + 1))
+    plt.xlabel("time")
+    plt.ylabel("voltage")
+    plt.title("DER Voltage")
+    for c in range(len(vbus)):
+        plt.plot(t, vbus[c], label='DER_id %s' % (c + 1))
     # plt.legend()
-    # plt.xlim(0, 2)
-    # plt.show()
+    # plt.xlim(0, 6)
+    plt.show()
+
+    plt.xlabel("time")
+    plt.ylabel("Input wn")
+    plt.title("Secondary frequency Control Input")
+    for e in range(DER_num):
+        plt.plot(t, wn[e], label='DER_id %s' % (e + 1))
+    # plt.legend()
+    # plt.xlim(0, 6)
+    plt.show()
+
+    plt.xlabel("time")
+    plt.ylabel("Input vn")
+    plt.title("Secondary Voltage Control Input")
+    for f in range(DER_num):
+        plt.plot(t, vn[f], label='DER_id %s' % (f + 1))
+    # plt.legend()
+    # plt.xlim(0, 6)
+    plt.show()
+
+    return reward
 
 
 if __name__ == '__main__':
     args = parse_args()
     os.makedirs(args.plot_dir, exist_ok=True)
+    num_test = 1
+    reward_list = []
     if args.num_DER == 4:
         from configs.parameters_4 import *
     else:
@@ -127,7 +173,10 @@ if __name__ == '__main__':
     DER_num = len(BUSES)
     lines_num = sum(sum(np.array(BUSES))) // 2
     loads_num = sum(BUS_LOAD)
-    DER_controller = DER_controller(args.mode, args.critic_bus_id, DER_num, lines_num, loads_num, DER_dic, BUSES,
-                                    BUS_LOAD, rline, Lline, a_ctrl, AP,
-                                    G, Vnom, wref, mp1, rN, wc, F, wb, Lf, Cf, rLf, Lc, rLc, kp, ki)
-    main(args, DER_num, lines_num, loads_num, DER_controller)
+    for i in range(num_test):
+        der_controller = DER_controller(args.mode, args.critic_bus_id, DER_num, lines_num, loads_num, DER_dic, BUSES,
+                                        BUS_LOAD, rline, Lline, a_ctrl, AP,
+                                        G, Vnom, wref, mp1, rN, wc, F, wb, Lf, Cf, rLf, Lc, rLc, kp, ki)
+        reward = main(args, DER_num, lines_num, loads_num, der_controller)
+        reward_list.append(reward)
+    print(np.mean(reward_list))
