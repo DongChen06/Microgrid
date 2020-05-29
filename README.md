@@ -27,7 +27,11 @@ System Design
 ---------
 In this section, we will briefly illutrate the system design. Primary and second controller.
 
-To be added...
+<p align="center">
+     <img src="docs/VCVSI.png" alt="output_example" width="40%" height="40%">
+     <br>Fig.1 Architecture of the inverter-based VCVSI.
+</p>
+
 
 Graph Genration Function
 ---------
