@@ -5,7 +5,6 @@
 
 import numpy as np
 import math
-import random
 
 
 class DER_Unit:
@@ -28,12 +27,16 @@ class DER_Unit:
         self.Lc = Lc
         self.rLc = rLc
 
-    def forward(self, x, wcom, wn, vn, I_ld, I_lq):
+    def forward(self, x, wcom, wn, vn, I_ld, I_lq, disturbance_R, disturbance_L):
+        Rload = self.Rload + disturbance_R * self.Rload
+        Lload = self.Lload + disturbance_L * self.Lload
+        # Rload = self.Rload
+        # Lload = self.Lload
         # Transferring Inv. Output Currents to Global DQ
         ioD = math.cos(x[1]) * x[12] - math.sin(x[1]) * x[13]
         ioQ = math.sin(x[1]) * x[12] + math.cos(x[1]) * x[13]
 
-        if self.Rload == 0:
+        if Rload == 0:
             # Defining Bus Voltages
             vbD = self.rN * (ioD + sum(I_ld))
             vbQ = self.rN * (ioQ + sum(I_lq))
@@ -68,13 +71,13 @@ class DER_Unit:
         xdot12 = (-self.rLc / self.Lc) * x[12] + wcom * x[13] + (1 / self.Lc) * (x[10] - vbd)
         xdot13 = (-self.rLc / self.Lc) * x[13] - wcom * x[12] + (1 / self.Lc) * (x[11] - vbq)
 
-        if self.Rload == 0:
+        if Rload == 0:
             xdot14 = 0
             xdot15 = 0
         else:
             # ------Loads-------
-            xdot14 = (-self.Rload / self.Lload) * x[14] + wcom * x[15] + (1 / self.Lload) * vbD
-            xdot15 = (-self.Rload / self.Lload) * x[15] - wcom * x[14] + (1 / self.Lload) * vbQ
+            xdot14 = (-Rload / self.Lload) * x[14] + wcom * x[15] + (1 / Lload) * vbD
+            xdot15 = (-Rload / self.Lload) * x[15] - wcom * x[14] + (1 / Lload) * vbQ
 
         return [xdot1, xdot2, xdot3, xdot4, xdot5, xdot6, xdot7, xdot8, xdot9, xdot10, xdot11, xdot12, xdot13, xdot14,
                 xdot15], vbD, vbQ
@@ -83,7 +86,7 @@ class DER_Unit:
 class DER_controller:
     def __init__(self, mode, critic_bus_id, DER_num, lines_num, loads_num, DER_dic, BUSES, BUS_LOAD, rline, Lline,
                  a_ctrl, AP, G, Vnom,
-                 wref, mp1, rN, wc, F, wb, Lf, Cf, rLf, Lc, rLc, kp, ki, random_init=True):
+                 wref, mp1, rN, wc, F, wb, Lf, Cf, rLf, Lc, rLc, kp, ki, random_init=True, sampling_time=0.1):
         self.DG = []
         self.wn_id_ls = []
         self.vn_id_ls = []
@@ -109,11 +112,14 @@ class DER_controller:
         self.ki = ki
         self.mode = mode
         self.critic_bus_id = critic_bus_id
+        self.sampling_time = sampling_time
+        self.disturbance_R = np.array([0] * self.DER_num)
+        self.disturbance_L = np.array([0] * self.DER_num)
 
         for i in range(self.DER_num):
             if random_init:
-                ratio_R = 0.4 * random.random() + 0.8
-                ratio_L = 0.4 * random.random() + 0.8
+                ratio_R = 0.4 * np.random.rand() + 0.8
+                ratio_L = 0.4 * np.random.rand() + 0.8
             else:
                 ratio_R = 1
                 ratio_L = 1
@@ -194,7 +200,7 @@ class DER_controller:
                     [0, x[1 + 13 * i], x[2 + 13 * i], x[3 + 13 * i], x[4 + 13 * i], x[5 + 13 * i], x[6 + 13 * i],
                      x[7 + 13 * i], x[8 + 13 * i], x[9 + 13 * i], x[10 + 13 * i], x[11 + 13 * i],
                      x[12 + 13 * i], x[13 + 13 * i], x[self.load_id_ls[i]], x[self.load_iq_ls[i]]],
-                    wcom, x[self.wn_id_ls[i]], x[self.vn_id_ls[i]], line_ls_id, line_ls_iq)
+                    wcom, x[self.wn_id_ls[i]], x[self.vn_id_ls[i]], line_ls_id, line_ls_iq, self.disturbance_R[i], self.disturbance_L[i])
 
         # -------------------------lines------------------
         # ------line1--------
@@ -234,7 +240,7 @@ class DER_controller:
             Vref = self.kp * (self.Vnom - np.sqrt(
                 (self.vbD[self.critic_bus_id - 1]) ** 2 + (self.vbQ[self.critic_bus_id - 1]) ** 2)) + self.ki * x[-1]
 
-        if t < 0.2:
+        if t < self.sampling_time * 10:
             self.xdot[(13 * self.DER_num + 2 * self.lines_num + 2 * self.loads_num + 1):] = [0] * (
                     len(self.xdot) - (13 * self.DER_num + 2 * self.lines_num + 2 * self.loads_num + 1))
         else:
