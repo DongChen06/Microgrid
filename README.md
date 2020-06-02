@@ -1,13 +1,11 @@
-Large-scale Islanded Microgrids based on Multi-agent Reinforcement Learning Control Methods
+Large-scale Islanded Microgrids based on PID Control Methods
 ===============
 - Built by Dong Chen from Michigan State University
 - Started on Feb.01, 2020
 
 Overview
 -------
-We plan to develop a power grid simulation platform with large number of DERs. Instead of the conventional control methods, we want to try multi-agent reinforcement learning algorithms. 
-
-Problems we are targeting at are voltage and frequency stabilization and power sharing among DERs.
+We plan to develop a power grid simulation platform with large number of DERs. Problems we are targeting at are voltage and frequency stabilization and power sharing among DERs.
 
 
 Code Structure
@@ -22,7 +20,6 @@ In the implementation, we should build a similar configuration file and list the
 - [x] Normal volatge and frequency control.
 - [x] Critical bus volatge and frequency control.
 - [ ] Input parameters of microgrid system by excel or cvs file.
-- [ ] Use multi-agent reinforcement learning methods to control the microgrid system.
 
 Last two functions will be added in the near future.
 
@@ -30,7 +27,11 @@ System Design
 ---------
 In this section, we will briefly illutrate the system design. Primary and second controller.
 
-To be added...
+<p align="center">
+     <img src="docs/VCVSI.png" alt="output_example" width="40%" height="40%">
+     <br>Fig.1 Architecture of the inverter-based VCVSI.
+</p>
+
 
 Graph Genration Function
 ---------
