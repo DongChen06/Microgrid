@@ -294,26 +294,26 @@ BUSES = np.array([[0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
                   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0]])  # 20
 
 DER_dic = {
-    0: [Rload1, Lload1, Kpv1, Kiv1, Kpc1, Kic1, mp1, nq1],
-    1: [0, 0, Kpv2, Kiv2, Kpc2, Kic2, mp2, nq2],
-    2: [Rload2, Lload2, Kpv3, Kiv3, Kpc3, Kic3, mp3, nq3],
-    3: [0, 0, Kpv4, Kiv4, Kpc4, Kic4, mp4, nq4],
-    4: [Rload3, Lload3, Kpv5, Kiv5, Kpc5, Kic5, mp5, nq5],
-    5: [0, 0, Kpv6, Kiv6, Kpc6, Kic6, mp6, nq6],
-    6: [Rload4, Lload4, Kpv7, Kiv7, Kpc7, Kic7, mp7, nq7],
-    7: [0, 0, Kpv8, Kiv8, Kpc8, Kic8, mp8, nq8],
-    8: [Rload5, Lload5, Kpv9, Kiv9, Kpc9, Kic9, mp9, nq9],
-    9: [0, 0, Kpv10, Kiv10, Kpc10, Kic10, mp10, nq10],
-    10: [Rload6, Lload6, Kpv11, Kiv11, Kpc11, Kic11, mp11, nq11],
-    11: [0, 0, Kpv12, Kiv12, Kpc12, Kic12, mp12, nq12],
-    12: [Rload7, Lload7, Kpv13, Kiv13, Kpc13, Kic13, mp13, nq13],
-    13: [0, 0, Kpv14, Kiv14, Kpc14, Kic14, mp14, nq14],
-    14: [Rload8, Lload8, Kpv15, Kiv15, Kpc15, Kic15, mp15, nq15],
-    15: [0, 0, Kpv16, Kiv16, Kpc16, Kic16, mp16, nq16],
-    16: [Rload9, Lload9, Kpv17, Kiv17, Kpc17, Kic17, mp17, nq17],
-    17: [0, 0, Kpv18, Kiv18, Kpc18, Kic18, mp18, nq18],
-    18: [Rload10, Lload10, Kpv19, Kiv19, Kpc19, Kic19, mp19, nq19],
-    19: [0, 0, Kpv20, Kiv20, Kpc20, Kic20, mp20, nq20],
+    0: [Rload1, Lload1, mp1, nq1],
+    1: [0, 0, Kpv2, mp2, nq2],
+    2: [Rload2, Lload2, mp3, nq3],
+    3: [0, 0, mp4, nq4],
+    4: [Rload3, Lload3, mp5, nq5],
+    5: [0, 0, mp6, nq6],
+    6: [Rload4, Lload4, mp7, nq7],
+    7: [0, 0, mp8, nq8],
+    8: [Rload5, Lload5, mp9, nq9],
+    9: [0, 0, mp10, nq10],
+    10: [Rload6, Lload6, mp11, nq11],
+    11: [0, 0, mp12, nq12],
+    12: [Rload7, Lload7, mp13, nq13],
+    13: [0, 0, mp14, nq14],
+    14: [Rload8, Lload8, mp15, nq15],
+    15: [0, 0, mp16, nq16],
+    16: [Rload9, Lload9, mp17, nq17],
+    17: [0, 0, mp18, nq18],
+    18: [Rload10, Lload10, mp19, nq19],
+    19: [0, 0, mp20, nq20],
 }
 
 rline = [rline1, rline2, rline3, rline4, rline5, rline6, rline7, rline8, rline9, rline10, rline11, rline12, rline13,
@@ -322,26 +322,26 @@ Lline = [Lline1, Lline2, Lline3, Lline4, Lline5, Lline6, Lline7, Lline8, Lline9,
          Lline14, Lline15, Lline16, Lline17, Lline18, Lline19, Lline20]
 
 # add 0, to meet the difference between MATLAB and python, shape=(361,)
-x0 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, Vnom, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, Vnom, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, Vnom, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, Vnom, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, Vnom, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, Vnom, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, Vnom, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, Vnom, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, Vnom, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, Vnom, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, Vnom, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, Vnom, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, Vnom, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, Vnom, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, Vnom, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, Vnom, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, Vnom, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, Vnom, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, Vnom, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, Vnom, 0, 0, 0,
+x0 = [0, 0, 0, 0, 0, 0,  # 1
+      0, 0, 0, 0, 0,  # 2
+      0, 0, 0, 0, 0,  # 3
+      0, 0, 0, 0, 0,  # 4
+      0, 0, 0, 0, 0,  # 5
+      0, 0, 0, 0, 0,  # 6
+      0, 0, 0, 0, 0,  # 7
+      0, 0, 0, 0, 0,  # 8
+      0, 0, 0, 0, 0,  # 9
+      0, 0, 0, 0, 0,  # 10
+      0, 0, 0, 0, 0,  # 11
+      0, 0, 0, 0, 0,  # 12
+      0, 0, 0, 0, 0,  # 13
+      0, 0, 0, 0, 0,  # 14
+      0, 0, 0, 0, 0,  # 15
+      0, 0, 0, 0, 0,  # 16
+      0, 0, 0, 0, 0,  # 17
+      0, 0, 0, 0, 0,  # 18
+      0, 0, 0, 0, 0,  # 19
+      0, 0, 0, 0, 0,  # 20
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
       2 * pi * 60, 2 * pi * 60, 2 * pi * 60, 2 * pi * 60, 2 * pi * 60, 2 * pi * 60, 2 * pi * 60, 2 * pi * 60,

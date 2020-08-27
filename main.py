@@ -5,31 +5,10 @@
 
 from scipy.integrate import odeint
 import matplotlib.pyplot as plt
-from DER_fn import DER_controller
+from DER_fn import DERController
 import argparse
 import os
 from datetime import datetime
-
-
-def parse_args():
-    default_config_dir = 'configs'
-    plot_dir = 'results/'
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--config_dir', type=str, required=False,
-                        default=default_config_dir, help="experiment config dir")
-    parser.add_argument('--num_DER', type=int, required=False,
-                        default=4, help="number of DERs")
-    parser.add_argument('--mode', type=str, required=False,
-                        default='Vnom', help="voltage control mode", choices=['Vnom', 'Vcritc'])
-    parser.add_argument('--critic_bus_id', type=int, required=False,
-                        default=2, help="critical bus id")
-    parser.add_argument('--plot_dir', type=str, required=False,
-                        default=plot_dir, help="directory for storing results")
-    parser.add_argument('--plot_unit_voltage', type=bool, required=False,
-                        default=True, help="plot per unit voltage or not")
-
-    args = parser.parse_args()
-    return args
 
 
 def main(args, DER_num, lines_num, loads_num, DER_controller, sampling_time=0.1, plotting=False, disturbance=True):
@@ -84,27 +63,25 @@ def main(args, DER_num, lines_num, loads_num, DER_controller, sampling_time=0.1,
 
     # active/reactive power ratio
     for j in range(DER_num):
-        PDG.append((mp[j] * (np.multiply(x[:, 13 * j + 10], x[:, 13 * j + 12]) + np.multiply(x[:, 13 * j + 11],
-                                                                                             x[:,
-                                                                                             13 * j + 13]))).tolist())
-        QDG.append((nq[j] * (np.multiply(-x[:, 13 * j + 10], x[:, 13 * j + 13]) + np.multiply(x[:, 13 * j + 11],
-                                                                                              x[:,
-                                                                                              13 * j + 12]))).tolist())
+        PDG.append(x[:, 5 * j + 2])
+        QDG.append(x[:, 5 * j + 3])
         # frequency
         w.append(
-            ((x[:, DER_num * 13 + lines_num * 2 + loads_num * 2 + j + 1] - mp[j] * x[:, 13 * j + 2]) / (
+            ((x[:, DER_num * 5 + lines_num * 2 + loads_num * 2 + j + 1] - mp[j] * x[:, 5 * j + 2]) / (
                     2 * pi)).tolist())
         # voltage of buses
         if args.plot_unit_voltage is True:
-            vbus.append((np.sqrt(x[:, 13 * j + 10] ** 2 + x[:, 13 * j + 11] ** 2) / Vnom).tolist())
+            vbus.append(
+                ((x[:, DER_num * 6 + lines_num * 2 + loads_num * 2 + j + 1] - nq[j] * x[:, 5 * j + 3]) / Vnom).tolist())
         else:
-            vbus.append((np.sqrt(x[:, 13 * j + 10] ** 2 + x[:, 13 * j + 11] ** 2)).tolist())
+            vbus.append((x[:, DER_num * 6 + lines_num * 2 + loads_num * 2 + j + 1] - nq[j] * x[:, 5 * j + 3]).tolist())
 
         # control input
-        wn.append((x[:, DER_num * 13 + lines_num * 2 + loads_num * 2 + j + 1]).tolist())
-        vn.append((x[:, DER_num * 14 + lines_num * 2 + loads_num * 2 + j + 1]).tolist())
-
+        wn.append((x[:, DER_num * 5 + lines_num * 2 + loads_num * 2 + j + 1]).tolist())
+        vn.append((x[:, DER_num * 6 + lines_num * 2 + loads_num * 2 + j + 1]).tolist())
+        print(1)
         for q in range(len(vbus[j][11:])):
+            # 11 is the start time step for the secondary control
             vi = vbus[j][11:][q]
             if vi >= 0.95 and vi <= 1.05:
                 reward += 0.05 - np.abs(1 - vi)
@@ -143,7 +120,6 @@ def main(args, DER_num, lines_num, loads_num, DER_controller, sampling_time=0.1,
             plt.plot(t, vbus[c], label='DER_id %s' % (c + 1))
         # plt.legend()
         # plt.xlim(0, 6)
-
 
         plt.subplot(224)
         plt.xlabel("time")
@@ -190,6 +166,27 @@ def main(args, DER_num, lines_num, loads_num, DER_controller, sampling_time=0.1,
     return reward
 
 
+def parse_args():
+    default_config_dir = 'configs'
+    plot_dir = 'results/'
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--config_dir', type=str, required=False,
+                        default=default_config_dir, help="experiment config dir")
+    parser.add_argument('--num_DER', type=int, required=False,
+                        default=20, help="number of DERs")
+    parser.add_argument('--mode', type=str, required=False,
+                        default='Vnom', help="voltage control mode", choices=['Vnom', 'Vcritc'])
+    parser.add_argument('--critic_bus_id', type=int, required=False,
+                        default=2, help="critical bus id")
+    parser.add_argument('--plot_dir', type=str, required=False,
+                        default=plot_dir, help="directory for storing results")
+    parser.add_argument('--plot_unit_voltage', type=bool, required=False,
+                        default=True, help="plot per unit voltage or not")
+
+    args = parser.parse_args()
+    return args
+
+
 if __name__ == '__main__':
     args = parse_args()
     os.makedirs(args.plot_dir, exist_ok=True)
@@ -210,10 +207,10 @@ if __name__ == '__main__':
     for i in range(num_test):
         np.random.seed(random_seed)
         random_seed += 1
-        der_controller = DER_controller(args.mode, args.critic_bus_id, DER_num, lines_num, loads_num, DER_dic, BUSES,
-                                        BUS_LOAD, rline, Lline, a_ctrl, AP,
-                                        G, Vnom, wref, mp1, rN, wc, F, wb, Lf, Cf, rLf, Lc, rLc, kp, ki,
-                                        sampling_time=sampling_time)
+        der_controller = DERController(args.mode, args.critic_bus_id, DER_num, lines_num, loads_num, DER_dic, BUSES,
+                                       BUS_LOAD, rline, Lline, a_ctrl, AP,
+                                       G, Vnom, wref, mp1, rN, wc, Lc, rLc, kp, ki,
+                                       sampling_time=sampling_time)
         reward = main(args, DER_num, lines_num, loads_num, der_controller, sampling_time, plotting=plot,
                       disturbance=False)  # False True
         reward_list.append(reward)
