@@ -18,17 +18,20 @@ class DERUnit:
         self.Lc = Lc
         self.rLc = rLc
 
-    def forward(self, x, wcom, wn, vn, I_ld, I_lq, disturbance_R, disturbance_L):
-        Rload = self.Rload + disturbance_R * self.Rload
-        Lload = self.Lload + disturbance_L * self.Lload
-        # Rload = self.Rload
-        # Lload = self.Lload
+    def forward(self, x, wcom, wn, vn, I_ld, I_lq, disturbance_R, disturbance_L, if_disturbance=True):
+        if if_disturbance:
+            Rload = self.Rload + disturbance_R * self.Rload
+            Lload = self.Lload + disturbance_L * self.Lload
+        else:
+            Rload = self.Rload
+            Lload = self.Lload
+
         # Transferring Inv. Output Currents to Global DQ
         ioD = math.cos(x[1]) * x[4] - math.sin(x[1]) * x[5]
         ioQ = math.sin(x[1]) * x[4] + math.cos(x[1]) * x[5]
 
+        # Defining Bus Voltages
         if Rload == 0:
-            # Defining Bus Voltages
             vbD = self.rN * (ioD + sum(I_ld))
             vbQ = self.rN * (ioQ + sum(I_lq))
         else:
@@ -48,11 +51,11 @@ class DERUnit:
         xdot4 = (-self.rLc / self.Lc) * x[4] + wcom * x[5] + (1 / self.Lc) * (vod_star - vbd)
         xdot5 = (-self.rLc / self.Lc) * x[5] - wcom * x[4] + (1 / self.Lc) * (voq_star - vbq)
 
+        # ------Loads------
         if Rload == 0:
             xdot6 = 0
             xdot7 = 0
         else:
-            # ------Loads-------
             xdot6 = (-Rload / self.Lload) * x[6] + wcom * x[7] + (1 / Lload) * vbD
             xdot7 = (-Rload / self.Lload) * x[7] - wcom * x[6] + (1 / Lload) * vbQ
 
@@ -173,7 +176,6 @@ class DERController:
                     self.disturbance_R[i], self.disturbance_L[i])
 
         # -------------------------lines------------------
-        # ------line1--------
         for line in range(self.lines_num):
             self.xdot[5 * self.DER_num + line * 2 + 1] = (-self.rline[line] / self.Lline[line]) * x[
                 5 * self.DER_num + line * 2 + 1] + wcom * x[5 * self.DER_num + line * 2 + 2] + (
@@ -230,5 +232,5 @@ class DERController:
             for e in range(self.DER_num):
                 self.xdot[self.wn_id_ls[e]] = Synch_Mat[e][0]
                 self.xdot[self.vn_id_ls[e]] = Vol_Mat[e][0]
-        print(t)
+        # print(t)
         return self.xdot

@@ -53,14 +53,11 @@ def main(args, DER_num, lines_num, loads_num, DER_controller, sampling_time=0.1,
     PDG = []
     QDG = []
     w = []
-
     # control input
     wn = []
     vn = []
-
     x = np.array(x)
     reward = 0
-
     # active/reactive power ratio
     for j in range(DER_num):
         PDG.append(x[:, 5 * j + 2])
@@ -79,11 +76,10 @@ def main(args, DER_num, lines_num, loads_num, DER_controller, sampling_time=0.1,
         # control input
         wn.append((x[:, DER_num * 5 + lines_num * 2 + loads_num * 2 + j + 1]).tolist())
         vn.append((x[:, DER_num * 6 + lines_num * 2 + loads_num * 2 + j + 1]).tolist())
-        print(1)
         for q in range(len(vbus[j][11:])):
             # 11 is the start time step for the secondary control
             vi = vbus[j][11:][q]
-            if vi >= 0.95 and vi <= 1.05:
+            if 0.95 <= vi <= 1.05:
                 reward += 0.05 - np.abs(1 - vi)
             elif vi <= 0.8 or vi >= 1.25:
                 reward += -20
@@ -203,7 +199,7 @@ if __name__ == '__main__':
     DER_num = len(BUSES)
     lines_num = sum(sum(np.array(BUSES))) // 2
     loads_num = sum(BUS_LOAD)
-    sampling_time = 0.1
+    sampling_time = 0.05
     for i in range(num_test):
         np.random.seed(random_seed)
         random_seed += 1
