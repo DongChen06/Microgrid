@@ -3,16 +3,12 @@ import math
 
 pi = math.pi
 # --------Parameter values--------------
-Cf = 50e-6
-Lf = 1.35e-3
 rLf = .1
 Lc = .35e-3
 rLc = .03
 wc = 31.41
 
 rN = 1e4
-F = .75
-wb = 2 * pi * 60
 wref = 2 * pi * 60
 Vnom = 380
 
@@ -295,7 +291,7 @@ BUSES = np.array([[0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
 
 DER_dic = {
     0: [Rload1, Lload1, mp1, nq1],
-    1: [0, 0, Kpv2, mp2, nq2],
+    1: [0, 0, mp2, nq2],
     2: [Rload2, Lload2, mp3, nq3],
     3: [0, 0, mp4, nq4],
     4: [Rload3, Lload3, mp5, nq5],
@@ -321,7 +317,7 @@ rline = [rline1, rline2, rline3, rline4, rline5, rline6, rline7, rline8, rline9,
 Lline = [Lline1, Lline2, Lline3, Lline4, Lline5, Lline6, Lline7, Lline8, Lline9, Lline10, Lline11, Lline12, Lline13,
          Lline14, Lline15, Lline16, Lline17, Lline18, Lline19, Lline20]
 
-# add 0, to meet the difference between MATLAB and python, shape=(361,)
+# add 0, to meet the difference between MATLAB and python, shape=(201,)
 x0 = [0, 0, 0, 0, 0, 0,  # 1
       0, 0, 0, 0, 0,  # 2
       0, 0, 0, 0, 0,  # 3

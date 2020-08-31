@@ -155,7 +155,7 @@ def main(args, DER_num, lines_num, loads_num, DER_controller, sampling_time=0.1,
         plt.title("Secondary Voltage Control Input")
         for f in range(DER_num):
             plt.plot(t, vn[f], label='DER_id %s' % (f + 1))
-        # plt.legend()
+        plt.legend()
         # plt.xlim(0, 6)
         plt.show()
 
@@ -169,7 +169,7 @@ def parse_args():
     parser.add_argument('--config_dir', type=str, required=False,
                         default=default_config_dir, help="experiment config dir")
     parser.add_argument('--num_DER', type=int, required=False,
-                        default=20, help="number of DERs")
+                        default=4, help="number of DERs")
     parser.add_argument('--mode', type=str, required=False,
                         default='Vnom', help="voltage control mode", choices=['Vnom', 'Vcritc'])
     parser.add_argument('--critic_bus_id', type=int, required=False,

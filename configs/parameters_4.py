@@ -3,8 +3,6 @@ import math
 
 pi = math.pi
 
-Cf = 50e-6
-Lf = 1.35e-3
 rLf = .1
 Lc = .35e-3
 rLc = .03
@@ -87,20 +85,20 @@ BUSES = [[0, 1, 0, 0],
          [0, 0, 1, 0]]
 
 DER_dic = {
-    0: [Rload1, Lload1, Kpv1, Kiv1, Kpc1, Kic1, mp1, nq1],
-    1: [0, 0, Kpv2, Kiv2, Kpc2, Kic2, mp2, nq2],
-    2: [Rload2, Lload2, Kpv3, Kiv3, Kpc3, Kic3, mp3, nq3],
-    3: [0, 0, Kpv4, Kiv4, Kpc4, Kic4, mp4, nq4]
+    0: [Rload1, Lload1, mp1, nq1],
+    1: [0, 0, mp2, nq2],
+    2: [Rload2, Lload2, mp3, nq3],
+    3: [0, 0, mp4, nq4]
 }
 
 rline = [rline1, rline2, rline3]
 Lline = [Lline1, Lline2, Lline3]
 
-# add 0, to meet the difference between MATLAB and python, shape=(71,)
-x0 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, Vnom, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, Vnom, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, Vnom, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, Vnom, 0, 0, 0,
+# add 0, to meet the difference between MATLAB and python, shape=(35,)
+x0 = [0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
       2 * pi * 60, 2 * pi * 60, 2 * pi * 60, 2 * pi * 60,
       Vnom, Vnom, Vnom, Vnom]
