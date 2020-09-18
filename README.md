@@ -5,7 +5,7 @@ Large-scale Islanded Microgrids based on PID Control Methods
 
 Overview
 -------
-We plan to develop a power grid simulation platform with large number of DERs. Problems we are targeting at are voltage and frequency stabilization and power sharing among DERs.
+We plan to develop a power grid simulation platform with large number of DERs. Problems we are targeting at are voltage and frequency stabilization and power sharing among DERs. There is another version of python-implementation of IEEE-34 bus system at [Link.](https://github.com/Derekabc/Microgrid_34_bus)
 
 
 Code Structure
