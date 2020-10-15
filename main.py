@@ -109,76 +109,75 @@ def main(args, DER_num, lines_num, loads_num, DER_controller, sampling_time = 0.
     print(reward)
 
     # # subplot: https://matplotlib.org/3.1.3/gallery/pyplots/pyplot_scales.html#sphx-glr-gallery-pyplots-pyplot-scales-py
-    # plt.figure()
-    #
-    # plt.subplot(221)
-    # for a in range(DER_num):
-    #     plt.plot(t, w[a], label='DER_id %s' % (a + 1))
+    plt.figure()
+    
+    plt.subplot(221)
+    for a in range(DER_num):
+        plt.plot(t, w[a], label='DER_id %s' % (a + 1))
     # # plt.xlim(0, 6)
-    # plt.xlabel("time")
+    plt.xlabel("time")
     # # plt.legend()
-    # plt.title("DER Frequency")
-    #
-    # plt.subplot(222)
-    # plt.xlabel("time")
-    # plt.ylabel("ratio")
-    # plt.title("Active power ratio")
-    # for b in range(DER_num):
-    #     plt.plot(t, PDG[b], label='DER_id %s' % (b + 1))
-    # # plt.legend()
-    # # plt.xlim(0, 6)
-    #
-    # plt.subplot(223)
-    # plt.xlabel("time")
-    # plt.ylabel("voltage")
-    # plt.title("DER Voltage")
-    # for c in range(DER_num):
-    #     plt.plot(t, vbus[c], label='DER_id %s' % (c + 1))
+    plt.title("DER Frequency")
+    
+    plt.subplot(222)
+    plt.xlabel("time")
+    plt.ylabel("ratio")
+    plt.title("Active power ratio")
+    for b in range(DER_num):
+        plt.plot(t, PDG[b], label='DER_id %s' % (b + 1))
     # # plt.legend()
     # # plt.xlim(0, 6)
-    #
-    #
-    # plt.subplot(224)
-    # plt.xlabel("time")
-    # plt.ylabel("ratio")
-    # plt.title("Reactive Power Ratio")
-    # for d in range(DER_num):
-    #     plt.plot(t, QDG[d], label='DER_id %s' % (d + 1))
+    
+    plt.subplot(223)
+    plt.xlabel("time")
+    plt.ylabel("voltage")
+    plt.title("DER Voltage")
+    for c in range(DER_num):
+        plt.plot(t, vbus[c], label='DER_id %s' % (c + 1))
     # # plt.legend()
     # # plt.xlim(0, 6)
-    #
-    # plt.subplots_adjust(top=0.92, bottom=0.08, left=0.10, right=0.95, hspace=0.25,
-    #                     wspace=0.35)
-    #
-    # plt.show()
+    
+    plt.subplot(224)
+    plt.xlabel("time")
+    plt.ylabel("ratio")
+    plt.title("Reactive Power Ratio")
+    for d in range(DER_num):
+        plt.plot(t, QDG[d], label='DER_id %s' % (d + 1))
+    # # plt.legend()
+    # # plt.xlim(0, 6)
+    
+    plt.subplots_adjust(top=0.92, bottom=0.08, left=0.10, right=0.95, hspace=0.25,
+                        wspace=0.35)
+    
+    plt.show()
     # plt.savefig(args.plot_dir + 'DER_' + str(args.num_DER) + '.png')
-    #
-    # plt.xlabel("time")
-    # plt.ylabel("voltage")
-    # plt.title("DER Voltage")
-    # for c in range(len(vbus)):
-    #     plt.plot(t, vbus[c], label='DER_id %s' % (c + 1))
+    
+    plt.xlabel("time")
+    plt.ylabel("voltage")
+    plt.title("DER Voltage")
+    for c in range(len(vbus)):
+        plt.plot(t, vbus[c], label='DER_id %s' % (c + 1))
     # # plt.legend()
     # # plt.xlim(0, 6)
-    # plt.show()
-    #
-    # plt.xlabel("time")
-    # plt.ylabel("Input wn")
-    # plt.title("Secondary frequency Control Input")
-    # for e in range(DER_num):
-    #     plt.plot(t, wn[e], label='DER_id %s' % (e + 1))
+    plt.show()
+    
+    plt.xlabel("time")
+    plt.ylabel("Input wn")
+    plt.title("Secondary frequency Control Input")
+    for e in range(DER_num):
+        plt.plot(t, wn[e], label='DER_id %s' % (e + 1))
     # # plt.legend()
     # # plt.xlim(0, 6)
-    # plt.show()
+    plt.show()
     #
-    # plt.xlabel("time")
-    # plt.ylabel("Input vn")
-    # plt.title("Secondary Voltage Control Input")
-    # for f in range(DER_num):
-    #     plt.plot(t, vn[f], label='DER_id %s' % (f + 1))
+    plt.xlabel("time")
+    plt.ylabel("Input vn")
+    plt.title("Secondary Voltage Control Input")
+    for f in range(DER_num):
+        plt.plot(t, vn[f], label='DER_id %s' % (f + 1))
     # # plt.legend()
     # # plt.xlim(0, 6)
-    # plt.show()
+    plt.show()
 
     return reward
 
@@ -186,7 +185,7 @@ def main(args, DER_num, lines_num, loads_num, DER_controller, sampling_time = 0.
 if __name__ == '__main__':
     args = parse_args()
     os.makedirs(args.plot_dir, exist_ok=True)
-    num_test = 10
+    num_test = 1
     random_seed = 0
     reward_list = []
     if args.num_DER == 4:
