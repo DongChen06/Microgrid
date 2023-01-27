@@ -85,13 +85,15 @@ To build a large-scale microgrid system, we try our generation function on a 20-
 Cite
 ---------
 ```
-@misc{chen2020powernet,
-      title={PowerNet: Multi-agent Deep Reinforcement Learning for Scalable Powergrid Control}, 
-      author={Dong Chen and Zhaojian Li and Tianshu Chu and Rui Yao and Feng Qiu and Kaixiang Lin},
-      year={2020},
-      eprint={2011.12354},
-      archivePrefix={arXiv},
-      primaryClass={eess.SY}
+@article{chen2021powernet,
+  title={Powernet: Multi-agent deep reinforcement learning for scalable powergrid control},
+  author={Chen, Dong and Chen, Kaian and Li, Zhaojian and Chu, Tianshu and Yao, Rui and Qiu, Feng and Lin, Kaixiang},
+  journal={IEEE Transactions on Power Systems},
+  volume={37},
+  number={2},
+  pages={1007--1017},
+  year={2021},
+  publisher={IEEE}
 }
 ```
 
